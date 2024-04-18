@@ -1,1 +1,4 @@
 ^dev$
+^LICENSE\.md$
+^fallingstarFUN\.Rproj$
+^\.Rproj\.user$
