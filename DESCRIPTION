@@ -1,24 +1,22 @@
 Package: fallfun
-Title: fallfun
 Version: 0.0.0.9000
-Authors@R: 
-    person("Yanhua", "Zheng", , "zyh3084989256@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-1103-9579"))
+Title: Fallfun
 Description: self use functions of fallingstar.
+Authors@R: person(given = "Yanhua",
+       family = "Zheng",
+       role = c("aut", "cre"),
+       email = "zyh3084989256@gmail.com",
+       comment = c(ORCID = "0000-0003-1103-9579"))
 License: MIT + file LICENSE
-Depends: 
-    R (>= 2.10)
-Imports: 
-    dplyr,
-    glue,
-    magrittr
-Suggests: 
-    knitr,
-    rmarkdown,
-    testthat
-VignetteBuilder: knitr
-Config/fusen/version: 0.5.2
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
+Depends: 
+    R (>= 2.10)
+LazyData: true
+Imports: 
+    magrittr
+Suggests: 
+    knitr
+VignetteBuilder: knitr
+Config/fusen/version: 0.5.2

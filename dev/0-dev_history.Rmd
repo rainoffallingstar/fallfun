@@ -14,7 +14,7 @@ All commands that you use to use when developing packages...
 ```{r description}
 # Describe your package
 fusen::fill_description(
-  pkg = here::here(),
+  pkg = here::here(),overwrite = TRUE,
   fields = list(
     Title = "fallfun",
     Description = "self use functions of fallingstar.",
@@ -26,9 +26,9 @@ fusen::fill_description(
 # Define License with use_*_license()
 usethis::use_mit_license("Yanhua Zheng")
 
-usethis::use_data(monet_color_df)
-usethis::use_data(monet)
-usethis::use_data(molandi_color)
+usethis::use_data(monet_color_df,overwrite = TRUE)
+usethis::use_data(monet,overwrite = TRUE)
+usethis::use_data(molandi_color,overwrite = TRUE)
 usethis::use_pipe()
 ```
 
