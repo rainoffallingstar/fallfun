@@ -32,6 +32,74 @@ monet_color_scheme(5)
 
   
 
+# build_beta_from_methylkit
+
+    
+
+  
+
+```{r example-build_beta_from_methylkit}
+
+```
+
+  
+
+  
+
+# resize_img_from_directory
+
+    
+
+  
+
+```{r example-resize_img_from_directory}
+
+```
+
+  
+
+  
+
+# rotate_img_from_directory
+
+    
+
+  
+
+```{r example-rotate_img_from_directory}
+
+```
+
+  
+
+  
+
+# flit_img_from_directory
+
+    
+
+  
+
+```{r example-flit_img_from_directory}
+
+```
+
+  
+
+  
+
+# flop_img_from_directory
+
+    
+
+  
+
+```{r example-flop_img_from_directory}
+
+```
+
+  
+
   
 
 

@@ -1,8 +1,20 @@
 flat_first.Rmd:
   path: dev/flat_first.Rmd
   state: active
-  R: R/monet_color_scheme.R
-  tests: tests/testthat/test-monet_color_scheme.R
+  R:
+  - R/build_beta_from_methylkit.R
+  - R/flit_img_from_directory.R
+  - R/flop_img_from_directory.R
+  - R/monet_color_scheme.R
+  - R/resize_img_from_directory.R
+  - R/rotate_img_from_directory.R
+  tests:
+  - tests/testthat/test-monet_color_scheme.R
+  - tests/testthat/test-build_beta_from_methylkit.R
+  - tests/testthat/test-resize_img_from_directory.R
+  - tests/testthat/test-rotate_img_from_directory.R
+  - tests/testthat/test-flit_img_from_directory.R
+  - tests/testthat/test-flop_img_from_directory.R
   vignettes: vignettes/get-started.Rmd
   inflate:
     flat_file: dev/flat_first.Rmd

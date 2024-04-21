@@ -77,6 +77,212 @@ test_that("monet_color_scheme works", {
   expect_true(inherits(monet_color_scheme, "function")) 
 })
 ```
+
+# build_beta_from_methylkit
+    
+```{r function-build_beta_from_methylkit}
+#' build_beta_from_methylkit
+#' 
+#' build_beta_from_methylkit
+#' @param test the result of methylkit with slopes including .data and  sample.ids
+#' @return data.frame
+#' 
+#' @export
+build_beta_from_methylkit <- function(test){
+  mat <- matrix(as.vector(unlist(test@.Data)), 
+                nrow = length(test@.Data[[1]]),
+                ncol = length(test@.Data)) %>% 
+    as.data.frame() %>% 
+    dplyr::mutate(probe = paste0(V1,".",V2)) %>% 
+    dplyr::select(-all_of(c("V1","V2","V3","V4")))
+  detavector <- seq(from = 5, to = ncol(mat)+2, by = 3)
+  message("decoding beta value")
+  sample_df_list <- list()
+  for (i in 1:length(detavector)){
+    mat_temp <- mat %>% 
+      dplyr::select(all_of(
+        c("probe",
+          paste0("V",detavector[i]),paste0("V",detavector[i]+1),paste0("V",detavector[i]+2)
+          )
+      )) %>% 
+      dplyr::mutate(beta = as.numeric(.[[paste0("V",detavector[i]+1)]])/ as.numeric(.[[paste0("V",detavector[i])]])) %>% 
+      dplyr::select(-all_of(c(paste0("V",detavector[i]),paste0("V",detavector[i]+1),paste0("V",detavector[i]+2)
+      )
+      )) %>% 
+      dplyr::relocate(probe)
+    colnames(mat_temp) <- c("probe",test@sample.ids[i])
+    sample_df_list[[i]] <- mat_temp
+  }
+  message("encoding beta matrix")
+  beta_df <- NULL
+  for (i in 1:length(sample_df_list)){
+    sampledf <- sample_df_list[[i]]
+    message(glue::glue("processing sample {i}"))
+    if (i == 1){
+      beta_df <-  sampledf
+    }else {
+      beta_df <- beta_df %>% 
+        dplyr::left_join(sampledf,by = "probe")
+    }
+  }
+  return(beta_df)
+}
+```
+  
+```{r example-build_beta_from_methylkit}
+
+```
+  
+```{r tests-build_beta_from_methylkit}
+test_that("build_beta_from_methylkit works", {
+  expect_true(inherits(build_beta_from_methylkit, "function")) 
+})
+```
+  
+# resize_img_from_directory
+    
+```{r function-resize_img_from_directory}
+#' resize_img_from_directory
+#' 
+#' resize_img_from_directory
+#' 
+#' @param working_dir the dir stores the images
+#' @param img_format default as png
+#' @param resize_w the size 
+#' @param resize_h the size
+#' @return null
+#' 
+#' @export
+resize_img_from_directory <- function(working_dir,img_format = "png",
+                                      resize_w = 224,resize_h = 224) {
+  img_match <- glue::glue("*.{img_format}")
+  png_images <- list.files(working_dir,
+                           img_match,
+                           full.names = FALSE)
+  for (a in 1:length(png_images)){
+    Imgdata <- EBImage::readImage(paste0(working_dir,png_images[a]), img_format) %>% 
+      EBImage::resize(w=resize_w, h=resize_h) 
+    EBImage::writeImage(Imgdata, paste0(working_dir,png_images[a]), img_format,  quality = 100)
+  }
+  return(working_dir)
+}
+```
+  
+```{r example-resize_img_from_directory}
+
+```
+  
+```{r tests-resize_img_from_directory}
+test_that("resize_img_from_directory works", {
+  expect_true(inherits(resize_img_from_directory, "function")) 
+})
+```
+  
+# rotate_img_from_directory
+    
+```{r function-rotate_img_from_directory}
+#' rotate_img_from_directory
+#' 
+#' rotate_img_from_directory
+#' @param working_dir the dir stores the images
+#' @param img_format default as png
+#' @param x the rotated angle
+#' @return null
+#' 
+#' @export
+rotate_img_from_directory  <- function(working_dir,x,img_format = "png") {
+  img_match <- glue::glue("*.{img_format}")
+  png_images <- list.files(working_dir,
+                           img_match,
+                           full.names = FALSE)
+  for (a in 1:length(png_images)){
+    Imgdata <-  EBImage::readImage(paste0(working_dir,png_images[a]), img_format) %>% 
+      EBImage::rotate(x)
+    EBImage::writeImage(Imgdata, paste0(working_dir,"rotate_",x,"_",png_images[a]), img_format,  quality = 100)
+  }
+  return(working_dir)
+}
+```
+  
+```{r example-rotate_img_from_directory}
+
+```
+  
+```{r tests-rotate_img_from_directory}
+test_that("rotate_img_from_directory works", {
+  expect_true(inherits(rotate_img_from_directory, "function")) 
+})
+```
+  
+# flit_img_from_directory
+    
+```{r function-flit_img_from_directory}
+#' flit_img_from_directory
+#' 
+#' flit_img_from_directory
+#' @param working_dir the dir stores the images
+#' @param img_format default as png
+#' @return null
+#' 
+#' @export
+flit_img_from_directory  <- function(working_dir,img_format = "png") {
+  img_match <- glue::glue("*.{img_format}")
+  png_images <- list.files(working_dir,
+                           img_match,
+                           full.names = FALSE)
+  for (a in 1:length(png_images)){
+    Imgdata <- EBImage::readImage(paste0(working_dir,png_images[a]), img_format) %>% 
+      EBImage::flip() 
+    EBImage::writeImage(Imgdata, paste0(working_dir,"flip_",png_images[a]), img_format,  quality = 100)
+  }
+  return(working_dir)
+}
+```
+  
+```{r example-flit_img_from_directory}
+
+```
+  
+```{r tests-flit_img_from_directory}
+test_that("flit_img_from_directory works", {
+  expect_true(inherits(flit_img_from_directory, "function")) 
+})
+```
+  
+# flop_img_from_directory
+    
+```{r function-flop_img_from_directory}
+#' flop_img_from_directory
+#' 
+#' flop_img_from_directory
+#' @param working_dir the dir stores the images
+#' @param img_format default as png
+#' @return null
+#' 
+#' @export
+flop_img_from_directory  <- function(working_dir,img_format = "png") {
+  img_match <- glue::glue("*.{img_format}")
+  png_images <- list.files(working_dir,
+                           img_match,
+                           full.names = FALSE)
+  for (a in 1:length(png_images)){
+    Imgdata <- EBImage::readImage(paste0(working_dir,png_images[a]), img_format) %>% 
+      EBImage::flop() 
+    EBImage::writeImage(Imgdata, paste0(working_dir,"flop_",png_images[a]), img_format,  quality = 100)
+  }
+  return(working_dir)
+}
+```
+  
+```{r example-flop_img_from_directory}
+
+```
+  
+```{r tests-flop_img_from_directory}
+test_that("flop_img_from_directory works", {
+  expect_true(inherits(flop_img_from_directory, "function")) 
+})
+```
   
 
 ```{r development-inflate, eval=FALSE}
